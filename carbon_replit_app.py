@@ -2,11 +2,47 @@ import streamlit as st
 st.markdown(
     """
     <style>
-        body {
-            background-color: #e6f4ea;
-        }
+        /* Main app background */
         .stApp {
             background-color: #e6f4ea;
+        }
+
+        /* Sidebar background */
+        section[data-testid="stSidebar"] {
+            background-color: #f0fff0;
+        }
+
+        /* Sidebar text color */
+        .css-1d391kg, .css-1v0mbdj {
+            color: #1e4d2b;
+        }
+
+        /* Input boxes, buttons, and widgets */
+        .stTextInput > div > div > input,
+        .stNumberInput > div,
+        .stSelectbox > div,
+        .stButton > button {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        /* Headings */
+        h1, h2, h3, h4 {
+            color: #1E7F4F;
+        }
+
+        /* Center metric labels for elegance */
+        .stMetricLabel {
+            text-align: center;
+        }
+
+        /* Light shadow on containers */
+        .stMarkdown {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 10px;
         }
     </style>
     """,
