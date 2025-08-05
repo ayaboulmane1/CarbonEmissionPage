@@ -1,4 +1,18 @@
 import streamlit as st
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: #e6f4ea;
+        }
+        .stApp {
+            background-color: #e6f4ea;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 import pandas as pd
 import plotly.graph_objects as go
 from utils.emission_calculator import EmissionCalculator
