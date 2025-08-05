@@ -2,72 +2,112 @@ import streamlit as st
 st.markdown(
     """
     <style>
-        /* Main app background */
-        .stApp {
-            background-color: #f4fff4;
-        }
+        /* -------------------- GLOBAL STYLES -------------------- */
 
-        /* Sidebar background */
-        section[data-testid="stSidebar"] {
-            background-color: #e4f7e4;
+        html, body, .stApp {
+            background-color: #f5fdf8;
             color: #1e392a;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        /* Sidebar text and labels */
-        .css-1d391kg, .css-1v0mbdj, .css-pkbazv, label, .stSelectbox label {
+        /* -------------------- SIDEBAR -------------------- */
+        section[data-testid="stSidebar"] {
+            background-color: #e8f5ec;
+            padding: 2rem 1rem;
+            border-right: 1px solid #d2e3d9;
+        }
+
+        /* Sidebar text + links */
+        .css-1d391kg, .css-1v0mbdj, .css-pkbazv, .st-emotion-cache-1v0mbdj {
             color: #1e392a !important;
             font-weight: 600;
         }
 
-        /* Headings */
+        /* Sidebar header */
+        .css-1c7y2kd, .st-emotion-cache-1c7y2kd {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e392a;
+        }
+
+        /* -------------------- HEADERS -------------------- */
         h1, h2, h3, h4 {
-            color: #1E7F4F;
+            color: #14532d;
         }
 
-        /* Metric container and styling */
-        .stMetric {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 12px;
-        }
-
-        .stMetricLabel {
-            color: #444 !important;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .stMetricValue {
-            color: #1E7F4F !important;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        /* Input, select, number fields */
+        /* -------------------- FORM ELEMENTS -------------------- */
         .stTextInput > div > div > input,
         .stNumberInput > div,
         .stSelectbox > div {
             background-color: #ffffff !important;
             color: #222222 !important;
             border-radius: 8px;
-            border: 1px solid #cccccc;
-            box-shadow: none !important;
+            border: 1px solid #c3decf;
         }
 
-        /* Buttons */
-        .stButton > button {
-            background-color: #1E7F4F !important;
-            color: #ffffff !important;
-            border-radius: 6px;
-            border: none;
+        label {
+            color: #14532d !important;
             font-weight: 600;
         }
 
-        .stButton > button:hover {
-            background-color: #155c3e !important;
+        /* -------------------- BUTTONS -------------------- */
+        .stButton > button {
+            background-color: #14532d !important;
             color: #ffffff !important;
+            border-radius: 6px;
+            font-weight: 600;
+            border: none;
+        }
+
+        .stButton > button:hover {
+            background-color: #104826 !important;
+        }
+
+        /* -------------------- METRICS -------------------- */
+        .stMetric {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stMetricLabel {
+            color: #1e392a !important;
+            font-weight: 500;
+        }
+
+        .stMetricValue {
+            color: #15803d !important;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        /* -------------------- CHARTS -------------------- */
+        .stPlotlyChart div {
+            background-color: #ffffff !important;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        /* -------------------- TABS / PAGES -------------------- */
+        .block-container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        /* -------------------- BANNERS / BOXES -------------------- */
+        .banner {
+            background: linear-gradient(to right, #198754, #20c997);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
     </style>
     """,
@@ -159,23 +199,30 @@ TEXTS = {
 
 T = TEXTS[lang]
 
+# Updated HEADER
 st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #000000 0%, #DD0000 25%, #FFCE00 75%, #000000 100%); 
-                padding: 30px; border-radius: 18px; margin-bottom: 30px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
-        <h1 style="color: white; font-size: 3em; margin: 0; font-weight: 800; text-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
-            {T['title']}</h1>
-        <h3 style="color: #FFCE00; margin: 15px 0 0 0; font-weight: 400; font-size: 1.4em;">
-            {T['subtitle']}</h3>
+    <div style="background: #1e7f4f; 
+                padding: 32px; border-radius: 16px; margin-bottom: 24px; text-align: center; 
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+        <h1 style="color: #ffffff; font-size: 2.5rem; margin: 0; font-weight: 700;">
+            {T['title']}
+        </h1>
+        <h3 style="color: #c8facc; margin-top: 12px; font-weight: 400; font-size: 1.25rem;">
+            {T['subtitle']}
+        </h3>
     </div>
 """, unsafe_allow_html=True)
 
+# Updated BANNER
 st.markdown(f"""
-    <div style="background: linear-gradient(90deg, #2E8B57 0%, #32CD32 100%); 
-                padding: 18px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
-        <h4 style="color: white; margin: 0; text-align: center; font-size: 1.2em;">
-            {T['banner']}</h4>
+    <div style="background: linear-gradient(90deg, #198754 0%, #20c997 100%); 
+                padding: 16px; border-radius: 10px; margin-bottom: 32px;
+                text-align: center; color: white; font-size: 1.1rem; font-weight: 500;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+        {T['banner']}
     </div>
 """, unsafe_allow_html=True)
+
 
 st.sidebar.markdown(f"""
     <div style="background: linear-gradient(45deg, #1E7F4F 0%, #2E8B57 100%); 
