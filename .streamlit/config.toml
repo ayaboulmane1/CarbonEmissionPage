@@ -1,7 +1,8 @@
 [theme]
-primaryColor = "#1E7F4F"             # Button & highlight
-backgroundColor = "#F4FFF8"          # App background
-secondaryBackgroundColor = "#FFFFFF" # Widgets/cards
-textColor = "#1E392A"                # Primary text
-font = "sans serif"                  # Clean default font
+primaryColor = "#1E7F4F"             # Strong forest green (buttons, accents)
+backgroundColor = "#EDF5EC"          # Slightly darker green-tinted background
+secondaryBackgroundColor = "#FFFFFF" # Clean white for widgets/cards
+textColor = "#172B1B"                # Dark green-black for readability
+font = "sans serif"
+
 
