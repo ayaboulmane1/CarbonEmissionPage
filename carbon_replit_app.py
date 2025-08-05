@@ -1,69 +1,60 @@
 import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+from utils.emission_calculator import EmissionCalculator
+from local_data_handler import LocalDataManager
+import uuid
+
+st.set_page_config(
+    page_title="Carbon Emission Calculator - EV vs Diesel",
+    page_icon="",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Inject global styles for minimalist green design
 st.markdown(
     """
     <style>
-        /* -------------------- GLOBAL STYLES -------------------- */
-
         html, body, .stApp {
-            background-color: #f5fdf8;
+            background-color: #f4fff8;
             color: #1e392a;
             font-family: 'Segoe UI', sans-serif;
         }
-
-        /* -------------------- SIDEBAR -------------------- */
         section[data-testid="stSidebar"] {
-            background-color: #e8f5ec;
+            background-color: #e9f7ec;
             padding: 2rem 1rem;
-            border-right: 1px solid #d2e3d9;
+            border-right: 1px solid #cce8dc;
         }
-
-        /* Sidebar text + links */
-        .css-1d391kg, .css-1v0mbdj, .css-pkbazv, .st-emotion-cache-1v0mbdj {
+        .css-1d391kg, .css-1v0mbdj, .css-pkbazv {
             color: #1e392a !important;
             font-weight: 600;
         }
-
-        /* Sidebar header */
-        .css-1c7y2kd, .st-emotion-cache-1c7y2kd {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1e392a;
-        }
-
-        /* -------------------- HEADERS -------------------- */
         h1, h2, h3, h4 {
             color: #14532d;
         }
-
-        /* -------------------- FORM ELEMENTS -------------------- */
-        .stTextInput > div > div > input,
-        .stNumberInput > div,
-        .stSelectbox > div {
-            background-color: #ffffff !important;
-            color: #222222 !important;
-            border-radius: 8px;
-            border: 1px solid #c3decf;
-        }
-
         label {
             color: #14532d !important;
             font-weight: 600;
         }
-
-        /* -------------------- BUTTONS -------------------- */
+        .stTextInput > div > div > input,
+        .stNumberInput > div,
+        .stSelectbox > div {
+            background-color: #ffffff !important;
+            color: #1e392a !important;
+            border-radius: 8px;
+            border: 1px solid #cce8dc;
+        }
         .stButton > button {
-            background-color: #14532d !important;
+            background-color: #198754 !important;
             color: #ffffff !important;
             border-radius: 6px;
             font-weight: 600;
             border: none;
         }
-
         .stButton > button:hover {
-            background-color: #104826 !important;
+            background-color: #157347 !important;
         }
-
-        /* -------------------- METRICS -------------------- */
         .stMetric {
             background-color: #ffffff;
             border-radius: 10px;
@@ -72,32 +63,24 @@ st.markdown(
             margin-bottom: 20px;
             text-align: center;
         }
-
         .stMetricLabel {
             color: #1e392a !important;
             font-weight: 500;
         }
-
         .stMetricValue {
-            color: #15803d !important;
+            color: #198754 !important;
             font-size: 1.6rem;
             font-weight: bold;
         }
-
-        /* -------------------- CHARTS -------------------- */
         .stPlotlyChart div {
             background-color: #ffffff !important;
             border-radius: 8px;
             padding: 10px;
         }
-
-        /* -------------------- TABS / PAGES -------------------- */
         .block-container {
             padding-top: 2rem;
             padding-bottom: 2rem;
         }
-
-        /* -------------------- BANNERS / BOXES -------------------- */
         .banner {
             background: linear-gradient(to right, #198754, #20c997);
             padding: 1rem 2rem;
@@ -112,21 +95,6 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
-)
-
-
-
-import pandas as pd
-import plotly.graph_objects as go
-from utils.emission_calculator import EmissionCalculator
-from local_data_handler import LocalDataManager
-import uuid
-
-st.set_page_config(
-    page_title="Carbon Emission Calculator - EV vs Diesel",
-    page_icon="",
-    layout="wide",
-    initial_sidebar_state="expanded"
 )
 
 lang = st.sidebar.selectbox("Select Language", ["German", "English", "Spanish"])
@@ -199,11 +167,8 @@ TEXTS = {
 
 T = TEXTS[lang]
 
-# Updated HEADER
 st.markdown(f"""
-    <div style="background: #1e7f4f; 
-                padding: 32px; border-radius: 16px; margin-bottom: 24px; text-align: center; 
-                box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+    <div style="background: #1e7f4f; padding: 32px; border-radius: 16px; margin-bottom: 24px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
         <h1 style="color: #ffffff; font-size: 2.5rem; margin: 0; font-weight: 700;">
             {T['title']}
         </h1>
@@ -213,20 +178,12 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Updated BANNER
 st.markdown(f"""
-    <div style="background: linear-gradient(90deg, #198754 0%, #20c997 100%); 
-                padding: 16px; border-radius: 10px; margin-bottom: 32px;
-                text-align: center; color: white; font-size: 1.1rem; font-weight: 500;
-                box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
-        {T['banner']}
-    </div>
+    <div class="banner">{T['banner']}</div>
 """, unsafe_allow_html=True)
 
-
 st.sidebar.markdown(f"""
-    <div style="background: linear-gradient(45deg, #1E7F4F 0%, #2E8B57 100%); 
-                padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
+    <div style="background: linear-gradient(45deg, #1E7F4F 0%, #2E8B57 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
         <h2 style="color: white; margin: 0; text-align: center; font-weight: 600;">
             {T['sidebar_title']}</h2>
     </div>
@@ -238,7 +195,6 @@ st.sidebar.markdown(T['emission_dashboard'])
 st.sidebar.markdown(T['comparison_analysis'])
 st.sidebar.markdown(T['lifecycle_analysis'])
 
-# === Logic Starts Here ===
 if 'calculator' not in st.session_state:
     st.session_state.calculator = EmissionCalculator()
 
@@ -282,7 +238,8 @@ with col2:
             yaxis_title="CO2 (kg)",
             height=400,
             plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(color='#1e392a')
         )
 
         st.plotly_chart(fig, use_container_width=True)
