@@ -2,73 +2,78 @@ import streamlit as st
 st.markdown(
     """
     <style>
-        /* MAIN BACKGROUND */
+        /* Main app background */
         .stApp {
             background-color: #f4fff4;
         }
 
-        /* SIDEBAR BACKGROUND + TEXT */
+        /* Sidebar background */
         section[data-testid="stSidebar"] {
             background-color: #e4f7e4;
             color: #1e392a;
         }
 
-        /* Sidebar text override */
-        .css-1d391kg, .css-1v0mbdj, .css-pkbazv {
+        /* Sidebar text and labels */
+        .css-1d391kg, .css-1v0mbdj, .css-pkbazv, label, .stSelectbox label {
             color: #1e392a !important;
+            font-weight: 600;
         }
 
-        /* MAIN HEADINGS */
+        /* Headings */
         h1, h2, h3, h4 {
             color: #1E7F4F;
         }
 
-        /* METRICS SECTION */
+        /* Metric container and styling */
         .stMetric {
-            background-color: white;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 12px;
         }
 
         .stMetricLabel {
-            color: #444;
+            color: #444 !important;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         .stMetricValue {
-            color: #1E7F4F;
-            font-size: 1.6rem;
+            color: #1E7F4F !important;
+            font-size: 1.5rem;
             font-weight: bold;
         }
 
-        /* FORM WIDGETS */
-        .stSelectbox > div,
+        /* Input, select, number fields */
+        .stTextInput > div > div > input,
         .stNumberInput > div,
-        .stButton > button {
+        .stSelectbox > div {
             background-color: #ffffff !important;
-            color: #000000 !important;
-            border-radius: 10px;
-            border: 1px solid #ccc;
+            color: #222222 !important;
+            border-radius: 8px;
+            border: 1px solid #cccccc;
+            box-shadow: none !important;
         }
 
-        /* FORM LABELS */
-        label, .stSelectbox label {
+        /* Buttons */
+        .stButton > button {
+            background-color: #1E7F4F !important;
+            color: #ffffff !important;
+            border-radius: 6px;
+            border: none;
             font-weight: 600;
-            color: #1e392a;
         }
 
-        /* CLEANER MARGINS */
-        .block-container {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
+        .stButton > button:hover {
+            background-color: #155c3e !important;
+            color: #ffffff !important;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 
 import pandas as pd
