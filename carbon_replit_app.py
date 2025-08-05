@@ -58,7 +58,7 @@ TEXTS = {
         "total": "Total Lifecycle"
     },
     "Spanish": {
-        "title": "Calculadora Alemana de Emisiones de Carbono",
+        "title": "Calculadora de Emisiones de Carbono en Alemania",
         "subtitle": "Vehículo Eléctrico vs. Diésel - Análisis Completo del Ciclo de Vida",
         "banner": "Camino de Alemania hacia la Neutralidad Climática 2045 - ¡Cada Vehículo Cuenta!",
         "sidebar_title": "Navegación",
