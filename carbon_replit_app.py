@@ -2,25 +2,51 @@ import streamlit as st
 st.markdown(
     """
     <style>
-        /* Main app background */
+        /* MAIN BACKGROUND */
         .stApp {
-            background-color: #e6f4ea;
+            background-color: #f4fff4;
         }
 
-        /* Sidebar background */
+        /* SIDEBAR BACKGROUND + TEXT */
         section[data-testid="stSidebar"] {
-            background-color: #f0fff0;
+            background-color: #e4f7e4;
+            color: #1e392a;
         }
 
-        /* Sidebar text color */
-        .css-1d391kg, .css-1v0mbdj {
-            color: #1e4d2b;
+        /* Sidebar text override */
+        .css-1d391kg, .css-1v0mbdj, .css-pkbazv {
+            color: #1e392a !important;
         }
 
-        /* Input boxes, buttons, and widgets */
-        .stTextInput > div > div > input,
-        .stNumberInput > div,
+        /* MAIN HEADINGS */
+        h1, h2, h3, h4 {
+            color: #1E7F4F;
+        }
+
+        /* METRICS SECTION */
+        .stMetric {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        }
+
+        .stMetricLabel {
+            color: #444;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .stMetricValue {
+            color: #1E7F4F;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+
+        /* FORM WIDGETS */
         .stSelectbox > div,
+        .stNumberInput > div,
         .stButton > button {
             background-color: #ffffff !important;
             color: #000000 !important;
@@ -28,26 +54,22 @@ st.markdown(
             border: 1px solid #ccc;
         }
 
-        /* Headings */
-        h1, h2, h3, h4 {
-            color: #1E7F4F;
+        /* FORM LABELS */
+        label, .stSelectbox label {
+            font-weight: 600;
+            color: #1e392a;
         }
 
-        /* Center metric labels for elegance */
-        .stMetricLabel {
-            text-align: center;
-        }
-
-        /* Light shadow on containers */
-        .stMarkdown {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 10px;
-            border-radius: 10px;
+        /* CLEANER MARGINS */
+        .block-container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
         }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 import pandas as pd
 import plotly.graph_objects as go
