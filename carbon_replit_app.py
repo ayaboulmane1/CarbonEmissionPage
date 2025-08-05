@@ -112,7 +112,6 @@ st.sidebar.markdown(f"### {T['analysis_prompt']}")
 st.sidebar.markdown(T['vehicle_input'])
 st.sidebar.markdown(T['emission_dashboard'])
 st.sidebar.markdown(T['comparison_analysis'])
-st.sidebar.markdown(T['impact_analysis'])
 st.sidebar.markdown(T['lifecycle_analysis'])
 
 # === Logic Starts Here ===
