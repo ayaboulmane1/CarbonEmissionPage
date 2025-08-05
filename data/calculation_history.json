@@ -1,0 +1,41 @@
+[
+  {
+    "user_session": "e7dc1984-4543-43b2-98cd-ebf960307066",
+    "vehicle_type": "Elektrofahrzeug",
+    "brand": "BMW",
+    "model": "iX3",
+    "annual_km": 15000,
+    "efficiency": 21.0,
+    "grid_region": "Deutschland Kohleausstieg 2030",
+    "co2_annual": 989.0972356039741,
+    "co2_lifetime": 14836.458534059611,
+    "manufacturing_emissions": 8050,
+    "total_lifecycle": 22886.45853405961,
+    "calculation_data": {
+      "co2_annual": 989.0972356039741,
+      "co2_annual_direct": 926.0974116801541,
+      "co2_annual_upstream": 62.99982392382,
+      "co2_lifetime": 14836.458534059611,
+      "total_lifecycle": 22886.45853405961,
+      "nox_annual": 1.9781944712079482,
+      "pm25_annual": 0.09890972356039741,
+      "so2_annual": 0.9890972356039741,
+      "electricity_annual_kwh": 3149.991196191,
+      "grid_factor": 0.28,
+      "transmission_factor": 1.05,
+      "lifecycle_breakdown": {
+        "raw_material_extraction": 2300,
+        "battery_production": 3800,
+        "vehicle_assembly": 2200,
+        "transportation": 350,
+        "end_of_life": -600,
+        "total_manufacturing": 8050,
+        "operation_direct": 13891.461175202312,
+        "operation_upstream": 944.9973588573,
+        "total_operation": 14836.458534059611
+      },
+      "manufacturing_emissions": 8050
+    },
+    "created_at": "2025-07-26T20:55:13.160279"
+  }
+]
