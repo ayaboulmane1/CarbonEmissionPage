@@ -184,7 +184,7 @@ with col2:
         
         st.metric("Annual CO2 Emissions", f"{results['co2_annual']:.1f} kg")
         st.metric("Lifetime CO2 Emissions", f"{results['co2_lifetime']:.1f} kg")
-        st.metric("Total w/ Manufacturing", f"{results['total_lifetime']:.1f} kg")
+        st.metric("Total w/ Manufacturing", f"{results['total_lifecycle']:.1f} kg")
         
         # Environmental impact score
         impact_score = st.session_state.calculator.get_environmental_impact_score(results)
