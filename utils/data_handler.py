@@ -12,7 +12,7 @@ class DataHandler:
             "timestamp": datetime.now().isoformat(),
             "vehicle_type": vehicle_type,
             "parameters": parameters,
-            "results": calculation_data
+            "": calculation_data
         }
         self.calculations_history.append(record)
         return record
@@ -29,9 +29,9 @@ class DataHandler:
                 "Vehicle Type": calc["vehicle_type"],
                 "Annual Mileage": calc["parameters"].get("annual_mileage", "N/A"),
                 "Efficiency": calc["parameters"].get("efficiency", "N/A"),
-                "CO2 Annual (kg)": calc["results"]["co2_annual"],
-                "CO2 Lifetime (kg)": calc["results"]["co2_lifetime"],
-                "Total Lifetime (kg)": calc["results"]["total_lifetime"]
+                "CO2 Annual (kg)": calc[""]["co2_annual"],
+                "CO2 Lifetime (kg)": calc[""]["co2_lifetime"],
+                "Total Lifetime (kg)": calc[""]["total_lifecycle"]
             }
             data.append(row)
         
@@ -91,16 +91,16 @@ class DataHandler:
         if not self.calculations_history:
             return None
         
-        ev_results = []
-        diesel_results = []
+        ev_ = []
+        diesel_ = []
         
         for calc in self.calculations_history:
             if calc["vehicle_type"] == "Electric Vehicle":
-                ev_results.append(calc["results"])
+                ev_.append(calc[""])
             else:
-                diesel_results.append(calc["results"])
+                diesel_.append(calc[""])
         
         return {
-            "ev_results": ev_results,
-            "diesel_results": diesel_results
+            "ev_": ev_,
+            "diesel_": diesel_
         }
