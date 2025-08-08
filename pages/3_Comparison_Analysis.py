@@ -114,7 +114,7 @@ if st.session_state.scenarios:
             "Vehicle Type": scenario["vehicle_type"],
             "Annual CO2 (kg)": scenario["results"]["co2_annual"],
             "Lifetime CO2 (kg)": scenario["results"]["co2_lifetime"],
-            "Total w/ Manufacturing (kg)": scenario["results"]["total_lifetime"],
+            "Total w/ Manufacturing (kg)": scenario["results"]["total_lifecycle"],
             "Annual Mileage": scenario["annual_mileage"],
             "Efficiency": scenario["efficiency"],
             "NOx (kg)": scenario["results"]["nox_annual"],
