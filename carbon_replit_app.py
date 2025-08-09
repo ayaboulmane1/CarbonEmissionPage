@@ -4,6 +4,8 @@ import plotly.graph_objects as go
 from utils.emission_calculator import EmissionCalculator
 from local_data_handler import LocalDataManager
 import uuid
+import plotly.express as px
+from utils.data_handler import DataHandler
 
 st.set_page_config(
     page_title="Carbon Emission Calculator - EV vs Diesel",
