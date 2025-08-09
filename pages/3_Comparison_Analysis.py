@@ -8,7 +8,7 @@ from utils.data_handler import DataHandler
 
 st.set_page_config(page_title="Comparison Analysis", page_icon="⚖️", layout="wide")
 
-st.title("⚖️ Multi-Scenario Comparison Analysis")
+st.title(" Multi-Scenario Comparison Analysis")
 st.markdown("Compare multiple vehicle scenarios and analyze different driving patterns, efficiency levels, and grid mixes.")
 
 # Initialize components
@@ -90,7 +90,7 @@ with col2:
         for i, scenario in enumerate(st.session_state.scenarios):
             col_name, col_remove = st.columns([3, 1])
             with col_name:
-                st.write(f"🚗 {scenario['name']} ({scenario['vehicle_type']})")
+                st.write(f" {scenario['name']} ({scenario['vehicle_type']})")
             with col_remove:
                 if st.button("❌", key=f"remove_{i}"):
                     st.session_state.scenarios.pop(i)
@@ -139,7 +139,7 @@ if st.session_state.scenarios:
                 title="Annual CO2 Emissions by Scenario",
                 color_discrete_map={"Electric Vehicle": "#2E8B57", "Diesel Vehicle": "#8B4513"}
             )
-            fig_annual.update_xaxis(tickangle=45)
+            fig_annual.update_xaxes(tickangle=45)
             st.plotly_chart(fig_annual, use_container_width=True)
         
         with col2:
