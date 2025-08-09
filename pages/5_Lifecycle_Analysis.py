@@ -117,8 +117,7 @@ with col2:
 
 with col3:
     grid_mix = st.selectbox("Electricity Grid Mix", 
-                           ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy",
-                            "California", "Texas", "New York", "Europe Average", "China", "India"])
+                           ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy"])
 
 with col4:
     analysis_type = st.selectbox("Analysis Scope", 
