@@ -217,7 +217,7 @@ if st.session_state.scenarios:
             facet_row="Pollutant",
             log_y=True
         )
-        fig_pollutants_grouped.update_xaxis(tickangle=45)
+        fig_pollutants_grouped.update_xaxes(tickangle=45)
         st.plotly_chart(fig_pollutants_grouped, use_container_width=True)
     
     with tab3:
@@ -304,7 +304,7 @@ if st.session_state.scenarios:
                 title="Cost Efficiency ($/kg CO2)",
                 color_discrete_map={"Electric Vehicle": "#2E8B57", "Diesel Vehicle": "#8B4513"}
             )
-            fig_cost_efficiency.update_xaxis(tickangle=45)
+            fig_cost_efficiency.update_xaxes(tickangle=45)
             st.plotly_chart(fig_cost_efficiency, use_container_width=True)
         
         st.dataframe(df_costs, use_container_width=True, hide_index=True)
