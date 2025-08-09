@@ -22,7 +22,15 @@ class EmissionCalculator:
             "Polen": 0.690,   # Poland high-coal comparison
             "EU-Durchschnitt": 0.295  # EU average for reference
         }
-        
+        # case/whitespace-insensitive map
+        self._grid_factors_lc = {k.lower(): v for k, v in self.grid_factors.items()}
+
+        def _grid_factor(self, grid_name: str):
+            key = (grid_name or "").strip().lower()
+            if key not in self._grid_factors_lc:
+                valid = ", ".join(self.grid_factors.keys())
+                raise ValueError(f"Unknown grid type '{grid_name}'. Valid: {valid}")
+            return self._grid_factors_lc[key]
         # Additional pollutants (relative to CO2)
         self.pollutant_ratios = {
             "NOx": {"diesel": 0.015, "electric": 0.002},
@@ -279,27 +287,17 @@ class EmissionCalculator:
     def get_grid_decarbonization_projection(self, annual_mileage, ev_efficiency, years=15):
         """Project EV emissions with grid decarbonization over time"""
         # Assume 3% annual grid decarbonization
-        decarbonization_rate = 0.03
-        self.grid_factors = {
-            "US Average": 0.386,
-            "Coal Heavy": 0.820,
-            "Natural Gas": 0.500,
-            "Renewable Heavy": 0.050
-            }
-
-        
         projections = {}
         for grid_type in self.grid_factors.keys():
-            base_factor = self.grid_factors[grid_type.strip()]
-            yearly_emissions = []
-            
+            base_factor = self._grid_factor(grid_type)    # robust lookup
+            yearly = []
             for year in range(1, years + 1):
-                # Grid gets cleaner each year
-                adjusted_factor = base_factor * (1 - decarbonization_rate) ** year
-                annual_kwh = (annual_mileage / 100) * ev_efficiency
-                annual_co2 = annual_kwh * adjusted_factor
-                yearly_emissions.append(annual_co2)
-            
-            projections[grid_type] = yearly_emissions
-        
+                # example linear decarb to 60% by year N (adjust to your model)
+                decarb_multiplier = max(0.0, 1.0 - 0.6 * (year - 1) / max(1, years - 1))
+                factor = base_factor * decarb_multiplier
+                kwh_per_mile = ev_eff_kwh_per_100mi / 100.0
+                annual_kwh = annual_miles * kwh_per_mile
+                annual_co2 = annual_kwh * factor
+                yearly.append(annual_co2)
+            projections[grid_type] = yearly
         return projections
