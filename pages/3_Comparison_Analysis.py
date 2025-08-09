@@ -96,7 +96,7 @@ with col2:
                     st.session_state.scenarios.pop(i)
                     st.rerun()
         
-        if st.button("Clear All Scenarios", type="secondary"):
+        if st.button("Clear All Scenarios", type="secondary", key="clear_scenarios_btn1"):
             st.session_state.scenarios = []
             st.rerun()
     else:
@@ -424,6 +424,6 @@ if st.session_state.scenarios:
             )
     
     with col3:
-        if st.button("Clear All Scenarios", type="secondary"):
+        if st.button("Clear All Scenarios", type="secondary", key="clear_scenarios_btn"):
             st.session_state.scenarios = []
             st.rerun()
