@@ -116,8 +116,7 @@ with col2:
     diesel_efficiency = st.number_input("Diesel Efficiency (MPG)", min_value=15.0, max_value=60.0, value=30.0)
 
 with col3:
-    grid_mix = st.selectbox("Electricity Grid Mix", 
-                           ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy"])
+    grid_mix = st.selectbox("Electricity Grid Mix", list(st.session_state.calculator.grid_factors.keys())
 
 with col4:
     analysis_type = st.selectbox("Analysis Scope", 
