@@ -290,7 +290,7 @@ class EmissionCalculator:
         
         projections = {}
         for grid_type in self.grid_factors.keys():
-            base_factor = self.grid_factors[grid_type]
+            base_factor = self.grid_factors[grid_type.strip()]
             yearly_emissions = []
             
             for year in range(1, years + 1):
