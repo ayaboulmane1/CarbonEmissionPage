@@ -280,9 +280,16 @@ class EmissionCalculator:
         """Project EV emissions with grid decarbonization over time"""
         # Assume 3% annual grid decarbonization
         decarbonization_rate = 0.03
+        self.grid_factors = {
+            "US Average": 0.386,
+            "Coal Heavy": 0.820,
+            "Natural Gas": 0.500,
+            "Renewable Heavy": 0.050
+            }
+
         
         projections = {}
-        for grid_type in ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy"]:
+        for grid_type in self.grid_factors.keys():
             base_factor = self.grid_factors[grid_type]
             yearly_emissions = []
             
