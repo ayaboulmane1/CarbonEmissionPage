@@ -152,7 +152,7 @@ if st.session_state.scenarios:
                 title="Lifetime CO2 Emissions by Scenario",
                 color_discrete_map={"Electric Vehicle": "#2E8B57", "Diesel Vehicle": "#8B4513"}
             )
-            fig_lifetime.update_xaxis(tickangle=45)
+            fig_lifetime.update_xaxes(tickangle=45)
             st.plotly_chart(fig_lifetime, use_container_width=True)
         
         # Detailed comparison table
