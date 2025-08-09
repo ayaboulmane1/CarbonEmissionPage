@@ -113,54 +113,6 @@ st.sidebar.markdown(T['emission_dashboard'])
 st.sidebar.markdown(T['comparison_analysis'])
 st.sidebar.markdown(T['lifecycle_analysis'])
 
-if 'calculator' not in st.session_state:
-    st.session_state.calculator = EmissionCalculator()
-
-col1, col2 = st.columns([1, 1])
-
-with col1:
-    st.subheader(T['vehicle_type'])
-    vehicle = st.selectbox("", T['select_type'])
-    efficiency = st.number_input(T['efficiency_label'], min_value=10.0, max_value=50.0, value=18.0, step=0.5)
-    mileage = st.number_input(T['mileage'], min_value=1000, max_value=100000, value=15000, step=1000)
-
-    if st.button(T['calculate']):
-        if vehicle == T['select_type'][0]:
-            data = st.session_state.calculator.calculate_ev_emissions(mileage * 0.621371, efficiency, "Germany 2025")
-        else:
-            mpg = 235.2 / efficiency
-            data = st.session_state.calculator.calculate_diesel_emissions(mileage * 0.621371, mpg)
-
-        st.session_state.result = data
-
-with col2:
-    if 'result' in st.session_state:
-        r = st.session_state.result
-        st.subheader(T['result_title'])
-        st.metric(T['annual'], f"{r['co2_annual']:.1f} kg")
-        st.metric(T['lifetime'], f"{r['co2_lifetime']:.1f} kg")
-        st.metric(T['total'], f"{r['total_lifecycle']:.1f} kg")
-
-        df = pd.DataFrame({
-            "Metric": [T['annual'], T['lifetime'], T['total']],
-            "CO2 (kg)": [r['co2_annual'], r['co2_lifetime'], r['total_lifecycle']]
-        })
-
-        fig = go.Figure(data=[
-            go.Bar(x=df['Metric'], y=df['CO2 (kg)'], marker_color=['#1E7F4F', '#2E8B57', '#FFCE00'])
-        ])
-
-        fig.update_layout(
-            title=T['result_title'],
-            xaxis_title="",
-            yaxis_title="CO2 (kg)",
-            height=400,
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e392a')
-        )
-
-        st.plotly_chart(fig, use_container_width=True)
 # Initialize components
 if 'calculator' not in st.session_state:
     st.session_state.calculator = EmissionCalculator()
