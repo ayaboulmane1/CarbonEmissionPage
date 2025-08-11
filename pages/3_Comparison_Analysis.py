@@ -40,7 +40,7 @@ with col1:
         with col_b:
             if vehicle_type == "Electric Vehicle":
                 efficiency = st.number_input("Efficiency (kWh/100mi)", min_value=20.0, max_value=60.0, value=34.0)
-                grid_mix = st.selectbox("Grid Mix", ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy"])
+                grid_mix = st.selectbox("Grid Mix", list(st.session_state.calculator.grid_factors.keys()))
                 additional_param = grid_mix
             else:
                 efficiency = st.number_input("Efficiency (MPG)", min_value=15.0, max_value=60.0, value=30.0)
@@ -320,7 +320,7 @@ with col1:
     base_mileage = 12000
     base_efficiency = 34.0
     
-    grid_types = ["Renewable Heavy", "US Average", "Natural Gas", "Coal Heavy"]
+    grid_types = [list(st.session_state.calculator.grid_factors.keys())]
     grid_emissions = []
     
     for grid in grid_types:
