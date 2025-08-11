@@ -186,7 +186,7 @@ with col1:
         
         col_c, col_d = st.columns(2)
         with col_c:
-            grid_mix = st.selectbox(
+            grid_mix_label = st.selectbox(
                 "Electricity Grid Mix",
                   list(st.session_state.calculator.grid_factors.keys()) ,
                 help="Regional electricity generation source"
