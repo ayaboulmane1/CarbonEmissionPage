@@ -315,9 +315,7 @@ GRID_COLORS = ["#1E7F4F", "#2B8757", "#339160", "#3D9C69", "#47A772",
                "#51B27B", "#5DBE85", "#69C98F", "#76D399", "#84DDA3"]
     
 
-# build a stable color map (scenario -> color)
-color_map = {name: GRID_COLORS[i % len(GRID_COLORS)]
-             for i, name in enumerate(grid_types)}
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -332,7 +330,9 @@ with col1:
     for grid in grid_types:
         ev_calc = st.session_state.calculator.calculate_ev_emissions(base_mileage, base_efficiency, grid_mix)
         grid_emissions.append(ev_calc["co2_annual"])
-    
+    # build a stable color map (scenario -> color)
+        color_map = {name: GRID_COLORS[i % len(GRID_COLORS)]
+                     for i, name in enumerate(grid_types)}
     fig_grid_sensitivity = go.Figure()
     fig_grid_sensitivity.add_trace(go.Bar(
         x=grid_types,
