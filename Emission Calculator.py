@@ -188,9 +188,17 @@ with col1:
         with col_c:
             grid_mix = st.selectbox(
                 "Electricity Grid Mix",
-                ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy"],
+                  list(st.session_state.calculator.grid_factors.keys()) + ["Custom…"],
                 help="Regional electricity generation source"
             )
+            if grid_mix_label == "Custom…":
+            grid_mix_factor = st.number_input(
+                "Custom Grid Emission Factor (kg CO₂/kWh)",
+                min_value=0.0, max_value=1.5, value=0.36, step=0.01,
+                help="Enter a custom grid intensity"
+            )
+        else:
+            grid_mix_factor = st.session_state.calculator.grid_factors[grid_mix_label]
             
             charging_type = st.selectbox(
                 "Primary Charging Type",
