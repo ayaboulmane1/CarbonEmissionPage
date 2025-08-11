@@ -265,7 +265,7 @@ with tab3:
 # Grid mix impact analysis
 st.header("Electricity Grid Mix Impact Analysis")
 
-grid_scenarios = ["Renewable Heavy", "US Average", "Natural Gas", "Coal Heavy"]
+grid_scenarios = list(st.session_state.calculator.grid_factors.keys())
 grid_emissions = []
 
 for grid in grid_scenarios:
@@ -276,7 +276,7 @@ fig_grid = go.Figure()
 fig_grid.add_trace(go.Bar(
     x=grid_scenarios,
     y=grid_emissions,
-    marker_color=['#228B22', '#4682B4', '#FFA500', '#8B4513']
+    marker_color=[]
 ))
 
 # Add diesel baseline
