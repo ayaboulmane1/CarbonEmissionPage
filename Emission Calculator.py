@@ -192,7 +192,7 @@ with col1:
                 help="Regional electricity generation source"
             )
             if grid_mix_label == "Custom…":
-            grid_mix_factor = st.number_input(
+                grid_mix_factor = st.number_input(
                 "Custom Grid Emission Factor (kg CO₂/kWh)",
                 min_value=0.0, max_value=1.5, value=0.36, step=0.01,
                 help="Enter a custom grid intensity"
