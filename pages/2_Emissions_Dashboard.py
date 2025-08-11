@@ -266,7 +266,8 @@ with tab3:
 st.header("Electricity Grid Mix Impact Analysis")
 
 grid_scenarios = list(st.session_state.calculator.grid_factors.keys())
-grid_emissions = []
+grid_emissions = ["#1E7F4F", "#2B8757", "#339160", "#3D9C69", "#47A772",
+    "#51B27B", "#5DBE85", "#69C98F", "#76D399", "#84DDA3"]
 
 for grid in grid_scenarios:
     ev_grid_test = st.session_state.calculator.calculate_ev_emissions(rt_mileage, ev_efficiency, grid, rt_years)
