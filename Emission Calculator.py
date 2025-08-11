@@ -188,17 +188,11 @@ with col1:
         with col_c:
             grid_mix = st.selectbox(
                 "Electricity Grid Mix",
-                  list(st.session_state.calculator.grid_factors.keys()) + ["Custom…"],
+                  list(st.session_state.calculator.grid_factors.keys()) ,
                 help="Regional electricity generation source"
             )
-            if grid_mix_label == "Custom…":
-                grid_mix_factor = st.number_input(
-                "Custom Grid Emission Factor (kg CO₂/kWh)",
-                min_value=0.0, max_value=1.5, value=0.36, step=0.01,
-                help="Enter a custom grid intensity"
-            )
-                else:
-                    grid_mix_factor = st.session_state.calculator.grid_factors[grid_mix_label]
+            
+            grid_mix_factor = st.session_state.calculator.grid_factors[grid_mix_label]
         
             
             charging_type = st.selectbox(
@@ -268,14 +262,15 @@ with col2:
         # Calculate emissions
         if vehicle_type == "Electric Vehicle":
             parameters.update({
-                "grid_mix": grid_mix,
+                "grid_mix_label": grid_mix_label,
+                "grid_mix_factor": grid_mix_factor,
                 "charging_type": charging_type,
                 "battery_size": battery_size,
                 "cold_weather": cold_weather
             })
             
             results = st.session_state.calculator.calculate_ev_emissions(
-                annual_mileage, efficiency, grid_mix, vehicle_age
+                annual_mileage, efficiency, grid_mix_factor, vehicle_age
             )
         else:
             parameters.update({
@@ -316,10 +311,10 @@ with st.expander("Advanced Settings & Assumptions"):
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("**Emission Factors Used:**")
-        st.markdown("- Diesel: 2.68 kg CO2/liter")
-        st.markdown("- US Avg Grid: 0.386 kg CO2/kWh")
-        st.markdown("- Coal Heavy Grid: 0.820 kg CO2/kWh")
-        st.markdown("- Renewable Grid: 0.050 kg CO2/kWh")
+        if vehicle_type == "Electric Vehicle":
+            st.markdown(f"- Electricity Grid: **{grid_mix_factor:.3f} kg CO₂/kWh** "
+                        f"({grid_mix_label})")
+        st.markdown("- Diesel: 2.68 kg CO₂/liter")
     
     with col2:
         st.markdown("**Manufacturing Emissions:**")
