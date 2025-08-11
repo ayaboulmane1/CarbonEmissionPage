@@ -40,8 +40,8 @@ with col1:
         with col_b:
             if vehicle_type == "Electric Vehicle":
                 efficiency = st.number_input("Efficiency (kWh/100mi)", min_value=20.0, max_value=60.0, value=34.0)
-                grid_mix = st.selectbox("Grid Mix", list(st.session_state.calculator.grid_factors.keys()))
-                additional_param = grid_mix
+                grid_mix_factor= st.selectbox("Grid Mix", list(st.session_state.calculator.grid_factors.keys()))
+                additional_param = grid_mix_factor
             else:
                 efficiency = st.number_input("Efficiency (MPG)", min_value=15.0, max_value=60.0, value=30.0)
                 fuel_type = st.selectbox("Fuel Type", ["Regular Diesel", "Bio-Diesel (B20)", "Renewable Diesel"])
@@ -57,7 +57,7 @@ with col1:
             # Calculate emissions for scenario
             if vehicle_type == "Electric Vehicle":
                 results = st.session_state.calculator.calculate_ev_emissions(
-                    annual_mileage, efficiency, grid_mix, years
+                    annual_mileage, efficiency, grid_mix_factor, years
                 )
             else:
                 results = st.session_state.calculator.calculate_diesel_emissions(
@@ -328,7 +328,7 @@ with col1:
     grid_emissions = []
     
     for grid in grid_types:
-        ev_calc = st.session_state.calculator.calculate_ev_emissions(base_mileage, base_efficiency, grid_mix)
+        ev_calc = st.session_state.calculator.calculate_ev_emissions(base_mileage, base_efficiency, grid_mix_factor)
         grid_emissions.append(ev_calc["co2_annual"])
     # build a stable color map (scenario -> color)
         color_map = {name: GRID_COLORS[i % len(GRID_COLORS)]
