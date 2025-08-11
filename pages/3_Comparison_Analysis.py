@@ -328,7 +328,7 @@ with col1:
 
 # build a stable color map (scenario -> color)
     color_map = {name: GRID_COLORS[i % len(GRID_COLORS)]
-                 for i, name in enumerate(grid_scenarios)}
+                 for i, name in enumerate(grid_types)}
     
     for grid in grid_types:
         ev_calc = st.session_state.calculator.calculate_ev_emissions(base_mileage, base_efficiency, grid_mix)
