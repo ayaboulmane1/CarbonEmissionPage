@@ -324,7 +324,7 @@ with col1:
     grid_emissions = []
     
     for grid in grid_types:
-        ev_calc = st.session_state.calculator.calculate_ev_emissions(base_mileage, base_efficiency, grid)
+        ev_calc = st.session_state.calculator.calculate_ev_emissions(base_mileage, base_efficiency, grid_mix)
         grid_emissions.append(ev_calc["co2_annual"])
     
     fig_grid_sensitivity = go.Figure()
