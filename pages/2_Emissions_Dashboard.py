@@ -266,8 +266,13 @@ with tab3:
 st.header("Electricity Grid Mix Impact Analysis")
 
 grid_scenarios = list(st.session_state.calculator.grid_factors.keys())
-grid_emissions = ["#1E7F4F", "#2B8757", "#339160", "#3D9C69", "#47A772",
-    "#51B27B", "#5DBE85", "#69C98F", "#76D399", "#84DDA3"]
+grid_emissions = []
+GRID_COLORS = ["#1E7F4F", "#2B8757", "#339160", "#3D9C69", "#47A772",
+               "#51B27B", "#5DBE85", "#69C98F", "#76D399", "#84DDA3"]
+
+# build a stable color map (scenario -> color)
+color_map = {name: GRID_COLORS[i % len(GRID_COLORS)]
+             for i, name in enumerate(grid_scenarios)}
 
 for grid in grid_scenarios:
     ev_grid_test = st.session_state.calculator.calculate_ev_emissions(rt_mileage, ev_efficiency, grid, rt_years)
@@ -277,7 +282,7 @@ fig_grid = go.Figure()
 fig_grid.add_trace(go.Bar(
     x=grid_scenarios,
     y=grid_emissions,
-    marker_color=[]
+    marker_color=[color_map[g] for g in grid_scenarios]
 ))
 
 # Add diesel baseline
