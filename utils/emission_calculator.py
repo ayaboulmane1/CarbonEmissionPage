@@ -103,11 +103,11 @@ class EmissionCalculator:
         }
 
     # ---------------- EV ----------------
-    def calculate_ev_emissions(self, annual_mileage, kwh_per_100_miles, grid_mix, years=15):
+    def calculate_ev_emissions(self, annual_mileage, kwh_per_100_miles, grid_mix_factor, years=15):
         annual_kwh = (annual_mileage / 100.0) * kwh_per_100_miles
 
         # robust lookup; default to Deutschland 2025 if not found
-        grid_factor = self._grid_factor(grid_mix)
+        grid_factor = self._grid_factor(grid_mix_factor)
         if grid_factor is None:
             grid_factor = self.grid_factors["Deutschland 2025"]
 
@@ -164,8 +164,8 @@ class EmissionCalculator:
         so2_score = min(100, (emissions_data["so2_annual"] / 2.4) * 100)
         return round(co2_score * 0.4 + nox_score * 0.2 + pm25_score * 0.3 + so2_score * 0.1, 1)
 
-    def calculate_lifecycle_analysis(self, annual_mileage, ev_efficiency, diesel_efficiency, grid_mix, years=15):
-        ev_results = self.calculate_ev_emissions(annual_mileage, ev_efficiency, grid_mix, years)
+    def calculate_lifecycle_analysis(self, annual_mileage, ev_efficiency, diesel_efficiency, grid_mix_factor, years=15):
+        ev_results = self.calculate_ev_emissions(annual_mileage, ev_efficiency, grid_mix_factor, years)
         diesel_results = self.calculate_diesel_emissions(annual_mileage, diesel_efficiency, years)
 
         annual_savings = diesel_results["co2_annual"] - ev_results["co2_annual"]
