@@ -110,7 +110,7 @@ class EmissionCalculator:
         annual_kwh = (annual_mileage / 100.0) * kwh_per_100_miles
 
         # robust lookup; default to Deutschland 2025 if not found
-        grid_factor = self._grid_factor(grid_mix)
+        grid_factor = self._grid_factor(grid_mix_factor)
         if grid_factor is None:
             grid_factor = self.grid_factors["Deutschland 2025"]
 
