@@ -71,7 +71,7 @@ with col1:
     # EV parameters
     st.markdown("**Electric Vehicle:**")
     ev_efficiency = st.slider("EV Efficiency (kWh/100mi)", 20.0, 60.0, 34.0, 1.0)
-    ev_grid = st.selectbox("Grid Mix", ["US Average", "Coal Heavy", "Natural Gas", "Renewable Heavy"])
+    ev_grid = st.selectbox("Grid Mix", list(st.session_state.calculator.grid_factors.keys()))
     
     # Diesel parameters
     st.markdown("**Diesel Vehicle:**")
