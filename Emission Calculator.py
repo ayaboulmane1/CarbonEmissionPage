@@ -197,8 +197,9 @@ with col1:
                 min_value=0.0, max_value=1.5, value=0.36, step=0.01,
                 help="Enter a custom grid intensity"
             )
-        else:
-            grid_mix_factor = st.session_state.calculator.grid_factors[grid_mix_label]
+                else:
+                    grid_mix_factor = st.session_state.calculator.grid_factors[grid_mix_label]
+        
             
             charging_type = st.selectbox(
                 "Primary Charging Type",
