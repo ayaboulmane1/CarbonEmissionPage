@@ -119,32 +119,28 @@ st.header("Detailed Emissions Breakdown")
 tab1, tab3 = st.tabs(["CO2 Analysis", "Manufacturing Impact"])
 
 with tab1:
-    col1 = st.columns(1)
-    
-    with col1:
-        # CO2 over time
-        years_range = list(range(1, rt_years + 1))
-        ev_cumulative = [ev_rt['co2_annual'] * year for year in years_range]
-        diesel_cumulative = [diesel_rt['co2_annual'] * year for year in years_range]
+    years_range = list(range(1, rt_years + 1))
+    ev_cumulative = [ev_rt['co2_annual'] * year for year in years_range]
+    diesel_cumulative = [diesel_rt['co2_annual'] * year for year in years_range]
         
-        fig_cumulative = go.Figure()
-        fig_cumulative.add_trace(go.Scatter(
-            x=years_range, y=ev_cumulative, mode='lines+markers',
-            name='Electric Vehicle', line=dict(color='#2E8B57', width=3)
-        ))
-        fig_cumulative.add_trace(go.Scatter(
-            x=years_range, y=diesel_cumulative, mode='lines+markers',
-            name='Diesel Vehicle', line=dict(color='#8B4513', width=3)
-        ))
+    fig_cumulative = go.Figure()
+    fig_cumulative.add_trace(go.Scatter(
+    x=years_range, y=ev_cumulative, mode='lines+markers',
+    name='Electric Vehicle', line=dict(color='#2E8B57', width=3)
+    ))
+    fig_cumulative.add_trace(go.Scatter(
+    x=years_range, y=diesel_cumulative, mode='lines+markers',
+    name='Diesel Vehicle', line=dict(color='#8B4513', width=3)
+    ))
         
-        fig_cumulative.update_layout(
-            title="Cumulative CO2 Emissions Over Time",
-            xaxis_title="Years",
-            yaxis_title="Cumulative CO2 (kg)",
-            hovermode='x unified'
-        )
+    fig_cumulative.update_layout(
+        title="Cumulative CO2 Emissions Over Time",
+        xaxis_title="Years",
+        yaxis_title="Cumulative CO2 (kg)",
+        hovermode='x unified'
+    )
         
-        st.plotly_chart(fig_cumulative, use_container_width=True)
+    st.plotly_chart(fig_cumulative, use_container_width=True)
     
 with tab3:
     # Manufacturing impact analysis
