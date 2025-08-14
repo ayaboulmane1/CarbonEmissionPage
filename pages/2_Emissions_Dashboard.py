@@ -116,10 +116,10 @@ with col2:
 # Detailed breakdown section
 st.header("Detailed Emissions Breakdown")
 
-tab1, tab2, tab3 = st.tabs(["CO2 Analysis", "All Pollutants", "Manufacturing Impact"])
+tab1, tab3 = st.tabs(["CO2 Analysis", "Manufacturing Impact"])
 
 with tab1:
-    col1, col2 = st.columns(2)
+    col1 = st.columns(1)
     
     with col1:
         # CO2 over time
@@ -146,78 +146,6 @@ with tab1:
         
         st.plotly_chart(fig_cumulative, use_container_width=True)
     
-    with col2:
-        # Monthly breakdown
-        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        
-        monthly_ev = [ev_rt['co2_annual'] / 12] * 12
-        monthly_diesel = [diesel_rt['co2_annual'] / 12] * 12
-        
-        fig_monthly = go.Figure()
-        fig_monthly.add_trace(go.Bar(
-            x=months, y=monthly_ev, name='Electric Vehicle',
-            marker_color='#2E8B57'
-        ))
-        fig_monthly.add_trace(go.Bar(
-            x=months, y=monthly_diesel, name='Diesel Vehicle',
-            marker_color='#8B4513'
-        ))
-        
-        fig_monthly.update_layout(
-            title="Monthly CO2 Emissions",
-            xaxis_title="Month",
-            yaxis_title="CO2 Emissions (kg)",
-            barmode='group'
-        )
-        
-        st.plotly_chart(fig_monthly, use_container_width=True)
-
-with tab2:
-    # All pollutants comparison
-    pollutants_data = {
-        "Pollutant": ["CO2", "NOx", "PM2.5", "SO2"],
-        "Electric Vehicle": [
-            ev_rt['co2_annual'],
-            ev_rt['nox_annual'],
-            ev_rt['pm25_annual'],
-            ev_rt['so2_annual']
-        ],
-        "Diesel Vehicle": [
-            diesel_rt['co2_annual'],
-            diesel_rt['nox_annual'],
-            diesel_rt['pm25_annual'],
-            diesel_rt['so2_annual']
-        ]
-    }
-    
-    df_pollutants = pd.DataFrame(pollutants_data)
-    
-    # Normalize for better visualization (log scale)
-    fig_pollutants = go.Figure()
-    
-    for vehicle in ["Electric Vehicle", "Diesel Vehicle"]:
-        fig_pollutants.add_trace(go.Bar(
-            name=vehicle,
-            x=df_pollutants['Pollutant'],
-            y=df_pollutants[vehicle],
-            marker_color='#2E8B57' if vehicle == "Electric Vehicle" else '#8B4513'
-        ))
-    
-    fig_pollutants.update_layout(
-        title="Annual Pollutant Emissions Comparison",
-        xaxis_title="Pollutant Type",
-        yaxis_title="Emissions (kg)",
-        yaxis_type="log",
-        barmode='group'
-    )
-    
-    st.plotly_chart(fig_pollutants, use_container_width=True)
-    
-    # Display data table
-    st.subheader("Pollutant Emissions Data")
-    st.dataframe(df_pollutants, use_container_width=True, hide_index=True)
-
 with tab3:
     # Manufacturing impact analysis
     manufacturing_data = {
