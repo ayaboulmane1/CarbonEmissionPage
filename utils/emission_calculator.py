@@ -82,22 +82,13 @@ class EmissionCalculator:
         emission_standard="Euro 6",       # "Euro 6" | "Euro 5" | "EPA Tier 3"
         turbo=True
     ):
-    """
-    Lifecycle CO2 for diesel vehicle with fuel pathway and efficiency modifiers.
-
-    Notes:
-    - Fuel-type multipliers are applied to BOTH tailpipe and upstream CO2 per litre
-      to approximate WTW changes for biodiesel / renewable diesel.
-    - Engine size, turbo, and emission standard make small adjustments to real-world
-      fuel use (documented assumptions).
-    """
-
+    
     # ---- Assumptions / Modifiers ----
     # Fuel pathway impact on WTW CO2 per litre (tune as needed, or replace with literature values)
     fuel_type_mult = {
         "Regular Diesel": 1.00,
         "Bio-Diesel (B20)": 0.90,     # ~10% lower WTW as a conservative default
-        "Renewable Diesel": 0.40      # strong reduction (placeholder assumption)
+        "Renewable Diesel": 0.40      # strong reduction
     }.get(fuel_type, 1.00)
 
     # Real-world consumption modifier (small effect sizes; documented assumptions)
