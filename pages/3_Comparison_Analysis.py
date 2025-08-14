@@ -316,35 +316,38 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("Grid Mix Sensitivity (EVs)")
-    
+
     base_mileage = 12000
     base_efficiency = 34.0
-    
-    grid_types = [list(st.session_state.calculator.grid_factors.keys())]
-    # compute emissions for each grid label
-    grid_emissions = [
-        st.session_state.calculator.calculate_ev_emissions(
-            base_mileage, base_efficiency, grid_name
-        )["co2_annual"]
-        for grid_name in grid_types
-    ]
-    color_map = {
-        name: GRID_COLORS[i % len(GRID_COLORS)]
-        for i, name in enumerate(grid_types)
-    }
-    
+
+    # 1) Flat list of string labels (no nesting)
+    grid_types = list(st.session_state.calculator.grid_factors.keys())
+
+    # 2) Compute emissions for each grid label
+    grid_emissions = []
+    for name in grid_types:
+        # ensure we pass a STRING; str(...) guards against accidental non-strings
+        ev_calc = st.session_state.calculator.calculate_ev_emissions(
+            base_mileage, base_efficiency, str(name)
+        )
+        grid_emissions.append(ev_calc["co2_annual"])
+
+    # 3) Colors per category
+    GRID_COLORS = ["#1E7F4F", "#2B8757", "#339160", "#3D9C69", "#47A772",
+                   "#51B27B", "#5DBE85", "#69C98F", "#76D399", "#84DDA3"]
+    color_map = {name: GRID_COLORS[i % len(GRID_COLORS)] for i, name in enumerate(grid_types)}
+
+    # 4) Plot
     fig_grid_sensitivity = go.Figure(go.Bar(
         x=grid_types,
         y=grid_emissions,
         marker_color=[color_map[name] for name in grid_types]
     ))
-    
     fig_grid_sensitivity.update_layout(
         title="EV Emissions Sensitivity to Grid Mix",
         xaxis_title="Grid Type",
         yaxis_title="Annual CO2 (kg)"
     )
-    
     st.plotly_chart(fig_grid_sensitivity, use_container_width=True)
 
 with col2:
