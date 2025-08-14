@@ -155,7 +155,7 @@ if 'lca_results' in st.session_state:
     
     with col3:
         total_savings = lca_results['total_savings_15_years']
-        st.metric("15-Year Total Savings", f"{total_savings:.0f} kg", 
+        st.metric(,f"{years:.0f} Year Total Savings", f"{total_savings:.0f} kg", 
                  "EV advantage over lifetime")
     
     with col4:
