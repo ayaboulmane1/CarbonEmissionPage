@@ -71,6 +71,99 @@ class EmissionCalculator:
             
         key = (grid_name or "").strip().lower()
         return self._grid_factors_lc.get(key)
+#<<< Diesel with fuel type and more parameters (for the first page) >>>
+    def calculate_diesel_emissions_full(
+        self,
+        annual_mileage,                  # miles/year
+        mpg,                              # miles per gallon
+        years=15,
+        fuel_type="Regular Diesel",       # "Regular Diesel" | "Bio-Diesel (B20)" | "Renewable Diesel"
+        engine_size_l=2.0,
+        emission_standard="Euro 6",       # "Euro 6" | "Euro 5" | "EPA Tier 3"
+        turbo=True
+    ):
+    """
+    Lifecycle CO2 for diesel vehicle with fuel pathway and efficiency modifiers.
+
+    Notes:
+    - Fuel-type multipliers are applied to BOTH tailpipe and upstream CO2 per litre
+      to approximate WTW changes for biodiesel / renewable diesel.
+    - Engine size, turbo, and emission standard make small adjustments to real-world
+      fuel use (documented assumptions).
+    """
+
+    # ---- Assumptions / Modifiers ----
+    # Fuel pathway impact on WTW CO2 per litre (tune as needed, or replace with literature values)
+    fuel_type_mult = {
+        "Regular Diesel": 1.00,
+        "Bio-Diesel (B20)": 0.90,     # ~10% lower WTW as a conservative default
+        "Renewable Diesel": 0.40      # strong reduction (placeholder assumption)
+    }.get(fuel_type, 1.00)
+
+    # Real-world consumption modifier (small effect sizes; documented assumptions)
+    consumption_mod = 1.0
+    if engine_size_l and engine_size_l > 2.5:
+        consumption_mod *= 1.05      # larger engines tend to use a bit more fuel
+    if turbo:
+        consumption_mod *= 0.97      # mild efficiency gain on downsized turbo engines
+    if emission_standard == "Euro 5":
+        consumption_mod *= 1.02      # legacy calibration / on-road gap
+    # Euro 6 (baseline) and EPA Tier 3 left as 1.00
+
+    # ---- Activity data (fuel use) ----
+    annual_gallons = (annual_mileage / mpg) * consumption_mod
+    annual_liters = annual_gallons * self.gallon_to_liter
+
+    # ---- Emission factors (kg CO2 / litre) ----
+    tailpipe_per_l = self.diesel_factor  # e.g., 2.68 kg CO2/L
+    upstream_per_l = self.fuel_cycle_factors["diesel"]["total_upstream"]  # e.g., ~1.35 kg CO2/L
+
+    # Apply fuel pathway multiplier to BOTH components so the breakdown remains consistent
+    tailpipe_per_l *= fuel_type_mult
+    upstream_per_l *= fuel_type_mult
+
+    # ---- Annual emissions ----
+    co2_annual_direct = annual_liters * tailpipe_per_l
+    co2_annual_upstream = annual_liters * upstream_per_l
+    co2_annual = co2_annual_direct + co2_annual_upstream
+
+    # ---- Lifetime totals ----
+    co2_lifetime = co2_annual * years
+
+    # ---- Lifecycle breakdown (preserves your structure) ----
+    lifecycle_breakdown = self.lifecycle_emissions["diesel"].copy()
+    lifecycle_breakdown["operation_direct"] = co2_annual_direct * years
+    lifecycle_breakdown["operation_upstream"] = co2_annual_upstream * years
+    lifecycle_breakdown["total_operation"] = co2_lifetime
+
+    total_lifecycle = co2_lifetime + lifecycle_breakdown["total_manufacturing"]
+
+    return {
+        "co2_annual": co2_annual,
+        "co2_annual_direct": co2_annual_direct,
+        "co2_annual_upstream": co2_annual_upstream,
+        "co2_lifetime": co2_lifetime,
+        "total_lifecycle": total_lifecycle,
+        "nox_annual": co2_annual * self.pollutant_ratios["NOx"]["diesel"],
+        "pm25_annual": co2_annual * self.pollutant_ratios["PM2.5"]["diesel"],
+        "so2_annual": co2_annual * self.pollutant_ratios["SO2"]["diesel"],
+        "fuel_annual_gallons": annual_gallons,
+        "fuel_annual_liters": annual_liters,
+        "lifecycle_breakdown": lifecycle_breakdown,
+        "manufacturing_emissions": lifecycle_breakdown["total_manufacturing"],
+
+        # helpful echoes for UI/debug
+        "assumptions": {
+            "fuel_type": fuel_type,
+            "fuel_type_multiplier": fuel_type_mult,
+            "engine_size_l": engine_size_l,
+            "turbo": turbo,
+            "emission_standard": emission_standard,
+            "consumption_modifier": consumption_mod,
+            "tailpipe_per_litre": tailpipe_per_l,
+            "upstream_per_litre": upstream_per_l
+        }
+    }
 
     # ---------------- Diesel ----------------
     def calculate_diesel_emissions(self, annual_mileage, mpg, years=15):
