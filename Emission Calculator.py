@@ -269,9 +269,17 @@ with col2:
                 "cold_weather": cold_weather
             })
             
-            results = st.session_state.calculator.calculate_ev_emissions(
-                annual_mileage, efficiency, grid_mix_factor, vehicle_age
-            )
+           results = st.session_state.calculator.calculate_ev_emissions_full(
+            annual_mileage=annual_mileage,                 # miles/year
+            kwh_per_100_miles=efficiency,                  # kWh/100 miles
+            grid_mix=grid_mix_label,                       # pass label; function resolves factor
+            years=vehicle_age,
+            battery_kwh=battery_size,
+            driving_pattern=driving_pattern,
+            charging_type=charging_type,
+            cold_weather=cold_weather
+        )
+
         else:
             parameters.update({
                 "engine_size": engine_size,
