@@ -268,16 +268,16 @@ with col2:
                 "battery_size": battery_size,
                 "cold_weather": cold_weather
             })
-            
-           results = st.session_state.calculator.calculate_ev_emissions_full(
-            annual_mileage=annual_mileage,                
-            kwh_per_100_miles=efficiency,                  # kWh/100 miles
-            grid_mix=grid_mix_label,                       
-            years=vehicle_age,
-            battery_kwh=battery_size,
-            driving_pattern=driving_pattern,
-            charging_type=charging_type,
-            cold_weather=cold_weather)
+            results = st.session_state.calculator.calculate_ev_emissions_full(
+                annual_mileage=annual_mileage,                
+                kwh_per_100_miles=efficiency,                  # kWh/100 miles
+                grid_mix=grid_mix_label,                       
+                years=vehicle_age,
+                battery_kwh=battery_size,
+                driving_pattern=driving_pattern,
+                charging_type=charging_type,
+                cold_weather=cold_weather
+            )
 
         else:
             parameters.update({
