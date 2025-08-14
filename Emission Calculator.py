@@ -281,8 +281,15 @@ with col2:
             })
             
             results = st.session_state.calculator.calculate_diesel_emissions(
-                annual_mileage, efficiency, vehicle_age
+                annual_mileage=annual_mileage,          # miles/year
+                mpg=efficiency,                         # MPG from UI
+                years=vehicle_age,
+                fuel_type=fuel_type,
+                engine_size_l=engine_size,
+                emission_standard=emission_standard,
+                turbo=turbo
             )
+
         
         # Save calculation
         st.session_state.data_handler.save_calculation(results, vehicle_type, parameters)
