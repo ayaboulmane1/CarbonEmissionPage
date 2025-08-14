@@ -124,7 +124,7 @@ if st.session_state.scenarios:
     df_scenarios = pd.DataFrame(scenario_data)
     
     # Comparison charts
-    tab1, tab2, tab3, tab4 = st.tabs(["CO2 Comparison", "All Pollutants", "Efficiency Analysis", "Cost Analysis"])
+    tab1, tab3, tab4 = st.tabs(["CO2 Comparison", "Efficiency Analysis", "Cost Analysis"])
     
     with tab1:
         col1, col2 = st.columns(2)
@@ -158,67 +158,6 @@ if st.session_state.scenarios:
         # Detailed comparison table
         st.subheader("Detailed Comparison Table")
         st.dataframe(df_scenarios, use_container_width=True, hide_index=True)
-    
-    with tab2:
-        # Multi-pollutant radar chart
-        if len(st.session_state.scenarios) >= 2:
-            fig_radar = go.Figure()
-            
-            # Normalize pollutants for radar chart
-            max_co2 = df_scenarios["Annual CO2 (kg)"].max()
-            max_nox = df_scenarios["NOx (kg)"].max()
-            max_pm25 = df_scenarios["PM2.5 (kg)"].max()
-            
-            for i, scenario in enumerate(st.session_state.scenarios[:5]):  # Limit to 5 scenarios
-                normalized_values = [
-                    scenario["results"]["co2_annual"] / max_co2 * 100,
-                    scenario["results"]["nox_annual"] / max_nox * 100 if max_nox > 0 else 0,
-                    scenario["results"]["pm25_annual"] / max_pm25 * 100 if max_pm25 > 0 else 0,
-                    scenario["results"]["so2_annual"] / max(s["results"]["so2_annual"] for s in st.session_state.scenarios) * 100
-                ]
-                
-                fig_radar.add_trace(go.Scatterpolar(
-                    r=normalized_values,
-                    theta=['CO2', 'NOx', 'PM2.5', 'SO2'],
-                    fill='toself',
-                    name=scenario["name"]
-                ))
-            
-            fig_radar.update_layout(
-                polar=dict(
-                    radialaxis=dict(
-                        visible=True,
-                        range=[0, 100]
-                    )),
-                title="Multi-Pollutant Comparison (Normalized %)",
-                showlegend=True
-            )
-            
-            st.plotly_chart(fig_radar, use_container_width=True)
-        
-        # Pollutant breakdown chart
-        pollutant_comparison = []
-        for scenario in st.session_state.scenarios:
-            pollutant_comparison.extend([
-                {"Scenario": scenario["name"], "Pollutant": "CO2", "Emissions": scenario["results"]["co2_annual"]},
-                {"Scenario": scenario["name"], "Pollutant": "NOx", "Emissions": scenario["results"]["nox_annual"]},
-                {"Scenario": scenario["name"], "Pollutant": "PM2.5", "Emissions": scenario["results"]["pm25_annual"]},
-                {"Scenario": scenario["name"], "Pollutant": "SO2", "Emissions": scenario["results"]["so2_annual"]}
-            ])
-        
-        df_pollutants = pd.DataFrame(pollutant_comparison)
-        
-        fig_pollutants_grouped = px.bar(
-            df_pollutants,
-            x="Scenario",
-            y="Emissions",
-            color="Pollutant",
-            title="Pollutant Emissions by Scenario",
-            facet_row="Pollutant",
-            log_y=True
-        )
-        fig_pollutants_grouped.update_xaxes(tickangle=45)
-        st.plotly_chart(fig_pollutants_grouped, use_container_width=True)
     
     with tab3:
         # Efficiency vs Emissions analysis
