@@ -228,6 +228,127 @@ class EmissionCalculator:
             "lifecycle_breakdown": lifecycle_breakdown,
             "manufacturing_emissions": lifecycle_breakdown["total_manufacturing"],
         }
+    def calculate_ev_emissions_full(
+        self,
+        annual_mileage,                  # miles/year
+        kwh_per_100_miles,               # kWh per 100 miles
+        grid_mix,                        # label or factor; robust lookup below
+        years=15,
+        battery_kwh=75.0,
+        driving_pattern="Mixed (City/Highway)",  # "Mixed (City/Highway)" | "Mostly City" | "Mostly Highway"
+        charging_type="Home (Level 2)",          # "Home (Level 2)" | "Public Fast Charging" | "Workplace Charging"
+        cold_weather=False
+    ):
+        
+        driving_pattern_factor = {
+            "Mostly City": 1.05,
+            "Mixed (City/Highway)": 1.00,
+            "Mostly Highway": 0.95
+        }.get(driving_pattern, 1.00)
+    
+        cold_weather_factor = 1.15 if cold_weather else 1.00
+    
+        # Charging losses modelled as extra energy drawn from grid
+        charging_loss_frac = {
+            "Home (Level 2)": 0.08,
+            "Workplace Charging": 0.08,
+            "Public Fast Charging": 0.10
+        }.get(charging_type, 0.08)
+    
+        # Effective consumption per 100 miles
+        eff_kwh_per_100_miles = kwh_per_100_miles * driving_pattern_factor * cold_weather_factor
+    
+        # Base annual kWh at the plug (before adding charging losses)
+        annual_kwh_base = (annual_mileage / 100.0) * eff_kwh_per_100_miles
+    
+        # Add charging losses as additional kWh required from the grid
+        annual_kwh = annual_kwh_base * (1.0 + charging_loss_frac)
+    
+        # -----------------------------
+        # 2) Grid factor + upstream adders
+        # -----------------------------
+        # Robust grid factor resolution
+        if isinstance(grid_mix, (int, float)):
+            grid_factor = float(grid_mix)
+        else:
+            grid_factor = self._grid_factor(grid_mix)
+            if grid_factor is None:
+                grid_factor = self.grid_factors.get("Deutschland 2025", 0.366)  # safe fallback
+    
+        # Your existing upstream structure:
+        # - T&D handled as a multiplicative factor on direct
+        transmission_factor = 1.0 + self.fuel_cycle_factors["electricity"]["transmission_losses"]  # e.g., 0.05 → 1.05
+        # - Infrastructure as an additive kg/kWh applied to kWh
+        infra_ef = self.fuel_cycle_factors["electricity"]["grid_infrastructure"]  # kg CO2/kWh
+    
+        # -----------------------------
+        # 3) Annual operational emissions
+        # -----------------------------
+        co2_annual_direct = annual_kwh * grid_factor
+        co2_annual_upstream = annual_kwh * infra_ef
+        co2_annual = (co2_annual_direct * transmission_factor) + co2_annual_upstream
+        co2_lifetime = co2_annual * years
+    
+        # -----------------------------
+        # 4) Manufacturing emissions (battery-scaled)
+        # -----------------------------
+        # Try to compute body+pack manufacturing from available attributes; otherwise fall back gracefully.
+        # Preferred: explicit base-without-battery + EF per kWh
+        battery_ef = getattr(self, "battery_emission_factor_kg_per_kwh", 82.5)  # kg CO2/kWh
+        base_ev_body_only = getattr(self, "base_vehicle_manufacturing_ev_body_only", None)
+    
+        # Fallbacks if your class only has a single total manufacturing value:
+        default_batt_kwh = getattr(self, "default_battery_kwh", None)
+        manu_default_total = self.lifecycle_emissions["electric"].get("total_manufacturing", 8500.0)
+    
+        if base_ev_body_only is not None:
+            manu = base_ev_body_only + battery_kwh * battery_ef
+        elif default_batt_kwh is not None:
+            # Replace assumed default battery with actual battery_kwh
+            manu = manu_default_total - (default_batt_kwh * battery_ef) + (battery_kwh * battery_ef)
+        else:
+            # Last resort: keep existing total (can’t separate battery share without a default)
+            manu = manu_default_total
+    
+        # Keep your lifecycle breakdown semantics
+        lifecycle_breakdown = self.lifecycle_emissions["electric"].copy()
+        lifecycle_breakdown["operation_direct"] = co2_annual_direct * transmission_factor * years
+        lifecycle_breakdown["operation_upstream"] = co2_annual_upstream * years
+        lifecycle_breakdown["total_operation"] = co2_lifetime
+        lifecycle_breakdown["total_manufacturing"] = manu
+    
+        total_lifecycle = co2_lifetime + manu
+    
+        return {
+            "co2_annual": co2_annual,
+            "co2_annual_direct": co2_annual_direct * transmission_factor,
+            "co2_annual_upstream": co2_annual_upstream,
+            "co2_lifetime": co2_lifetime,
+            "total_lifecycle": total_lifecycle,
+            "nox_annual": co2_annual * self.pollutant_ratios["NOx"]["electric"],
+            "pm25_annual": co2_annual * self.pollutant_ratios["PM2.5"]["electric"],
+            "so2_annual": co2_annual * self.pollutant_ratios["SO2"]["electric"],
+    
+            "electricity_annual_kwh": annual_kwh,
+            "grid_factor": grid_factor,
+            "transmission_factor": transmission_factor,
+    
+            "lifecycle_breakdown": lifecycle_breakdown,
+            "manufacturing_emissions": manu,
+    
+            # Helpful echoes for UI / debugging / thesis transparency
+            "assumptions": {
+                "driving_pattern": driving_pattern,
+                "driving_pattern_factor": driving_pattern_factor,
+                "cold_weather": cold_weather,
+                "cold_weather_factor": cold_weather_factor,
+                "charging_type": charging_type,
+                "charging_loss_fraction": charging_loss_frac,
+                "battery_kwh": battery_kwh,
+                "battery_ef_kg_per_kwh": battery_ef
+            }
+    }
+
 
     # ---------------- Comparison & LCA ----------------
     def calculate_cost_comparison(self, diesel_data, ev_data, electricity_price=0.13, gas_price=3.50):
