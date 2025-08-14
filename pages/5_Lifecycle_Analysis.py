@@ -470,31 +470,6 @@ if 'lca_results' in st.session_state:
             st.plotly_chart(fig_mileage_sensitivity, use_container_width=True)
         
         with col2:
-            # Grid mix sensitivity
-            grid_sensitivity = {}
-            for grid in ["Renewable Heavy", "US Average", "Natural Gas", "Coal Heavy"]:
-                temp_lca = st.session_state.calculator.calculate_lifecycle_analysis(
-                    lca_mileage, ev_efficiency, diesel_efficiency, grid, lca_years
-                )
-                grid_sensitivity[grid] = {
-                    "payback": temp_lca['carbon_payback_years'],
-                    "savings": temp_lca['annual_savings'],
-                    "total_ev": temp_lca['ev_results']['total_lifecycle'],
-                    "total_diesel": temp_lca['diesel_results']['total_lifecycle']
-                }
-            
-            grid_data = []
-            for grid, data in grid_sensitivity.items():
-                grid_data.append({
-                    "Grid Mix": grid,
-                    "Payback (years)": f"{data['payback']:.1f}" if data['payback'] != float('inf') else "Never",
-                    "Annual Savings (kg)": f"{data['savings']:.0f}",
-                    "Lifecycle Reduction (%)": f"{((data['total_diesel'] - data['total_ev']) / data['total_diesel'] * 100):.1f}%"
-                })
-            
-            st.subheader("Grid Mix Impact on Lifecycle Performance")
-            st.dataframe(pd.DataFrame(grid_data), use_container_width=True, hide_index=True)
-            
             # Efficiency sensitivity heatmap
             payback_matrix = []
             for ev_eff in efficiency_range_ev:
