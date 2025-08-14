@@ -66,8 +66,8 @@ class EmissionCalculator:
 
     # <<< FIXED: make this a real method (not nested in __init__) >>>
     def _grid_factor(self, grid_name: str):
-        if isinstance(grid_name_or_value, (int, float)):
-            return float(grid_name_or_value)
+        if isinstance(grid_name, (int, float)):
+            return float(grid_name)
             
         key = (grid_name or "").strip().lower()
         return self._grid_factors_lc.get(key)
