@@ -158,7 +158,7 @@ with col1:
         if vehicle_type == "Electric Vehicle":
             efficiency = st.number_input(
                 "Energy Efficiency (kWh/100 miles)",
-                min_value=20.0,
+                min_value=10.0,
                 max_value=60.0,
                 value=34.0,
                 step=1.0,
