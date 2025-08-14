@@ -414,6 +414,7 @@ class EmissionCalculator:
             "diesel_results": diesel_results,
             "carbon_payback_years": carbon_payback_years,
             "annual_savings": annual_savings,
+            "years": years,
             "lifecycle_comparison": lifecycle_comparison,
             "total_savings_15_years": annual_savings * years,
             "manufacturing_difference": manufacturing_difference,
