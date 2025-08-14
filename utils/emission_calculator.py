@@ -66,6 +66,9 @@ class EmissionCalculator:
 
     # <<< FIXED: make this a real method (not nested in __init__) >>>
     def _grid_factor(self, grid_name: str):
+        if isinstance(grid_name_or_value, (int, float)):
+            return float(grid_name_or_value)
+            
         key = (grid_name or "").strip().lower()
         return self._grid_factors_lc.get(key)
 
@@ -103,11 +106,11 @@ class EmissionCalculator:
         }
 
     # ---------------- EV ----------------
-    def calculate_ev_emissions(self, annual_mileage, kwh_per_100_miles, grid_mix_factor, years=15):
+    def calculate_ev_emissions(self, annual_mileage, kwh_per_100_miles, grid_mix, years=15):
         annual_kwh = (annual_mileage / 100.0) * kwh_per_100_miles
 
         # robust lookup; default to Deutschland 2025 if not found
-        grid_factor = self._grid_factor(grid_mix_factor)
+        grid_factor = self._grid_factor(grid_mix)
         if grid_factor is None:
             grid_factor = self.grid_factors["Deutschland 2025"]
 
