@@ -50,10 +50,23 @@ with col1:
         with col_c:
             years = st.number_input("Vehicle Lifetime", min_value=5, max_value=25, value=15)
             driving_pattern = st.selectbox("Driving Pattern", ["Mixed", "City", "Highway"])
+        def unique_name(base: str) -> str:
+            base = (base or "").strip() or "Scenario"
+            existing = {s["name"].strip().lower() for s in st.session_state.scenarios}
+
+            # If unused, return as-is
+            if base.lower() not in existing:
+                return base
         
+            # Otherwise append (2), (3), ...
+            i = 2
+            while f"{base} ({i})".lower() in existing:
+                i += 1
+            return f"{base} ({i})"
         submitted = st.form_submit_button("Add Scenario", type="primary")
         
-        if submitted and scenario_name:
+        if submitted:
+            new_name = unique_name(scenario_name)
             # Calculate emissions for scenario
             if vehicle_type == "Electric Vehicle":
                 results = st.session_state.calculator.calculate_ev_emissions(
@@ -66,7 +79,7 @@ with col1:
             
             # Add to scenarios
             scenario = {
-                "name": scenario_name,
+                "name": new_name,
                 "vehicle_type": vehicle_type,
                 "annual_mileage": annual_mileage,
                 "efficiency": efficiency,
@@ -77,7 +90,7 @@ with col1:
             }
             
             st.session_state.scenarios.append(scenario)
-            st.success(f"Added scenario: {scenario_name}")
+            st.success(f"Added scenario: {new_name}")
             st.rerun()
 
 with col2:
