@@ -280,7 +280,7 @@ with col2:
                 "turbo": turbo
             })
             
-            results = st.session_state.calculator.calculate_diesel_emissions(
+            results = st.session_state.calculator.calculate_diesel_emissions_full(
                 annual_mileage=annual_mileage,          # miles/year
                 mpg=efficiency,                         # MPG from UI
                 years=vehicle_age,
